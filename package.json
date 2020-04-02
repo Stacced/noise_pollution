@@ -3,9 +3,17 @@
     "version": "0.0.1",
     "description": "Lets user input latitude, longitude, and max distance from position and returns airports within submitted distance",
     "main": "app.js",
+    "author": {
+        "name": "Stacked"
+    },
+    "homepage": "https://github.com/Stacced/noise_pollution#readme",
+    "license": "GPL-3.0",
     "repository": {
         "url": "https://github.com/Stacced/noise_pollution",
         "type": "git"
+    },
+    "bugs": {
+        "url": "https://github.com/Stacced/noise_pollution/issues"
     },
     "scripts": {
         "start": "node app.js"

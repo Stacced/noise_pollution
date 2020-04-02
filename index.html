@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Airport locator</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <label>
+            Latitude:
+            <input type="text" value="46.23412" id="lat">
+        </label>
+        <label>
+            Longitude:
+            <input type="text" value="6.052646" id="lng">
+        </label>
+        <br>
+        <br>
+        <label>
+            Distance maximale (en km):
+            <input type="text" value="10" id="distance">
+        </label>
+        <br>
+        <button onclick="compute()">Calculer</button>
+        <div id="result"></div>
+    </body>
+    <script>
+        function compute() {
+            // Get data from fields
+            const lat = document.getElementById("lat").value;
+            const lng = document.getElementById("lng").value;
+            const dist = document.getElementById("distance").value;
+
+            // Fetch nearby airports from app API, and display them into result div
+            fetch('/api/compute?lat=' + lat + '&lng=' + lng + '&dist=' + dist)
+                .then(response => response.json())
+                .then(jsondata => {
+                    // Concatenate HTML string
+                    let htmlString = "Liste des aéroports à moins de " + dist + " km de distance:";
+                    htmlString += "<ul>";
+                    
+                    // Loop on each airport
+                    jsondata['airports'].forEach(airport => {
+                        htmlString += "<li>" + airport.name + " (distance: " + airport.distance.toFixed(1) + " km)</li>";
+                    });
+                    htmlString += "</ul>";
+
+                    document.getElementById("result").innerHTML = htmlString;
+                })
+                .catch(console.error);
+        }
+    </script>
+</html>

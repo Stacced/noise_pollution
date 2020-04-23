@@ -1,7 +1,7 @@
 {
     "name": "noise_pollution",
-    "version": "0.0.1",
-    "description": "Lets user input latitude, longitude, and max distance from position and returns airports within submitted distance",
+    "version": "0.0.2",
+    "description": "Node.js app returning airports within radius of GPS latitude and longitude. Served using Express and PortFinder",
     "main": "app.js",
     "author": {
         "name": "Stacked"

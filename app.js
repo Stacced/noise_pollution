@@ -2,7 +2,7 @@
 const express = require('express');
 const portfinder = require('portfinder');
 const fetch = require('node-fetch');
-const getDistanceFromLatLonInKm = require('./latlon');
+const getDistanceFromLatLonInKm = require('./js/latlon');
 
 // Constants
 const frEndpoint = 'https://www.flightradar24.com/_json/airports.php';
@@ -27,7 +27,7 @@ app.get('/api/compute', (req, res) => {
     airports.forEach(airport => {
         const distBetweenLocAndAirport = getDistanceFromLatLonInKm(userLat, userLng, airport.lat, airport.lon);
         if (distBetweenLocAndAirport <= userDist) {
-            returnData.airports.push({name: airport.name, distance: distBetweenLocAndAirport});
+            returnData.airports.push({name: airport.name, distance: distBetweenLocAndAirport, lat: airport.lat, lon: airport.lon});
         }
     });
     

@@ -3,6 +3,13 @@
     <head>
         <title>Airport locator</title>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="css/style.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+            crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+            integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+            crossorigin=""></script>
     </head>
     <body>
         <label>
@@ -22,8 +29,31 @@
         <br>
         <button onclick="compute()">Calculer</button>
         <div id="result"></div>
+        <div id="airports"></div>
     </body>
     <script>
+        // Init map
+        const airportsMap = L.map('airports').setView([46, 4], 5);
+
+        // Add world map layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(airportsMap);
+
+        // Define airport marker
+        const airportIcon = L.icon({
+            iconUrl: 'img/airplane.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -16],
+        })
+                    
+        // Create layer for markers and radius circle
+        const markersLayer = L.layerGroup().addTo(airportsMap);
+
+        /**
+         * Fetches compute API and display result on interactive map
+         */
         function compute() {
             // Get data from fields
             const lat = document.getElementById("lat").value;
@@ -34,13 +64,35 @@
             fetch('/api/compute?lat=' + lat + '&lng=' + lng + '&dist=' + dist)
                 .then(response => response.json())
                 .then(jsondata => {
+                    // Clear previous markers
+                    markersLayer.clearLayers();
+
+                    // Display distance radius on map
+                    L.circle([lat, lng], {
+                        radius: dist * 1000,
+                        fill: false
+                    }).addTo(markersLayer);
+                    
+                    // Add marker to user location and center map there
+                    L.marker([lat, lng]).addTo(markersLayer);
+                    airportsMap.setView([lat, lng]);
+
                     // Concatenate HTML string
                     let htmlString = "Liste des aéroports à moins de " + dist + " km de distance:";
                     htmlString += "<ul>";
-                    
+
                     // Loop on each airport
                     jsondata['airports'].forEach(airport => {
+                        // Add airport to the list
                         htmlString += "<li>" + airport.name + " (distance: " + airport.distance.toFixed(1) + " km)</li>";
+
+                        // Add airport marker on map
+                        const airportMarker = L.marker([airport.lat, airport.lon], {
+                            icon: airportIcon
+                        }).addTo(markersLayer);
+
+                        // Add popup with airport name to airport marker
+                        airportMarker.bindPopup(airport.name);
                     });
                     htmlString += "</ul>";
 

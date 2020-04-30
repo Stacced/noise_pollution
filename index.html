@@ -27,7 +27,7 @@
             <input type="text" value="10" id="distance">
         </label>
         <br>
-        <button onclick="compute()">Calculer</button>
+        <button onclick="getAirports()">Calculer</button>
         <div id="result"></div>
         <div id="airports"></div>
     </body>
@@ -49,19 +49,19 @@
         })
                     
         // Create layer for markers and radius circle
-        const markersLayer = L.layerGroup().addTo(airportsMap);
+        const markersLayer = L.featureGroup().addTo(airportsMap);
 
         /**
-         * Fetches compute API and display result on interactive map
+         * Fetches airports API and display result on interactive map
          */
-        function compute() {
+        function getAirports() {
             // Get data from fields
             const lat = document.getElementById("lat").value;
             const lng = document.getElementById("lng").value;
             const dist = document.getElementById("distance").value;
 
             // Fetch nearby airports from app API, and display them into result div
-            fetch('/api/compute?lat=' + lat + '&lng=' + lng + '&dist=' + dist)
+            fetch('/api/airports?lat=' + lat + '&lng=' + lng + '&dist=' + dist)
                 .then(response => response.json())
                 .then(jsondata => {
                     // Clear previous markers
@@ -70,12 +70,14 @@
                     // Display distance radius on map
                     L.circle([lat, lng], {
                         radius: dist * 1000,
-                        fill: false
+                        color: 'red',
+                        fillColor: '#f03',
+                        fillOpacity: 0.2,
                     }).addTo(markersLayer);
                     
                     // Add marker to user location and center map there
                     L.marker([lat, lng]).addTo(markersLayer);
-                    airportsMap.setView([lat, lng]);
+                    airportsMap.fitBounds(markersLayer.getBounds());
 
                     // Concatenate HTML string
                     let htmlString = "Liste des aéroports à moins de " + dist + " km de distance:";
@@ -92,7 +94,7 @@
                         }).addTo(markersLayer);
 
                         // Add popup with airport name to airport marker
-                        airportMarker.bindPopup(airport.name);
+                        airportMarker.bindPopup(airport.name + " (" + airport.distance.toFixed(1) + " km)");
                     });
                     htmlString += "</ul>";
 

@@ -1,3 +1,10 @@
+/**
+ * Project  :   noise_pollution
+ * Author   :   L.D
+ * Version  :   0.0.2
+ * Desc.    :   Main app logic, serves Express server with API
+ */
+
 // Dependencies
 const express = require('express');
 const portfinder = require('portfinder');
@@ -13,8 +20,11 @@ const app = express();
 // Airports JSON data
 let airports = {};
 
-// Serve compute API
-app.get('/api/compute', (req, res) => {
+/**
+ * Serve airports API
+ * @returns json
+ */
+app.get('/api/airports', (req, res) => {
     // Prepare return data array
     const returnData = {airports: []};
 

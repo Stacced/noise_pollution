@@ -39,6 +39,9 @@ npm run start
 * Twitter: [@Stackeed](https://twitter.com/Stackeed)
 * Github: [@Stacced](https://github.com/Stacced)
 
+## Libraries used
+* Leaflet Control Custom - GitHub repository [here](https://github.com/yigityuce/Leaflet.Control.Custom)
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Stacced/noise_pollution/issues).

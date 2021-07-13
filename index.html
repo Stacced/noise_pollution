@@ -7,9 +7,11 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
             integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
             crossorigin=""/>
+        <link rel="stylesheet" href="css/leaflet-slider.css"/>
         <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
             integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
             crossorigin=""></script>
+        <script src="js/leaflet-slider.js"></script>
     </head>
     <body>
         <label>
@@ -50,6 +52,12 @@
                     
         // Create layer for markers and radius circle
         const markersLayer = L.featureGroup().addTo(airportsMap);
+
+        // Add zoom scale
+        L.control.scale({
+            metric: true,
+            imperial: false,
+        }).addTo(airportsMap);
 
         /**
          * Fetches airports API and display result on interactive map
